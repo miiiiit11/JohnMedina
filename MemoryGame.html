@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memory Game</title>
+  <style>
+        @font-face {
+        font-family: "GameZ";
+        src: url("webfonts/NIXED.ttf");
+      }
+      @font-face {
+        font-family: "Raya";
+        src: url("font/Raya.ttf");
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+  
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: "Tic1";
+    background: 
+        radial-gradient(circle, rgba(0, 100, 0, 0.6) 30%, rgba(0, 40, 0, 0.9) 100%), /* Light to dark blend */
+        url('images/Cas.png') center center; /* Background image */
+    background-size: cover;
+    background-blend-mode: overlay; /* Smooth blending effect */
+}
+  
+      .leaderboard-container {
+        margin-left:30px;
+        margin-top: 10px;
+        width: 90%;
+        max-width: 900px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .leaderboard {
+        font-family: "GameZ";
+        transform: perspective(1000px) rotateX(30deg);
+        border: 5px solid #661321;
+        outline: thick ridge #e46f83;
+        width: 90%;
+        padding: 25px;
+        background: url("images/GameZone/table1.jpg") no-repeat center;
+        background-size: cover;
+        border-bottom-left-radius: 3cm;
+        border-bottom-right-radius: 3cm;
+        border-top-left-radius: 1cm;
+        border-top-right-radius: 1cm;
+        text-align: center;
+        margin-top: 15px;
+        color: white;
+        font-size: 1.3rem;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.5),
+          0px 0px 20px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      /* Start and Try Again Buttons */
+      .start-button,
+      .try-again-button {
+        margin-top: 10px;
+        width: 70px;
+        height: 30px;
+        font-size: 1.2rem;
+             transform: perspective(1000px) rotateX(30deg);
+            box-shadow: 0px 5px 1px rgba(0, 0, 0, 0.5);
+        color: white;
+        background: linear-gradient(45deg, #dede35, #debc35);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+      }
+      .start-button:hover,
+      .try-again-button:hover {
+        transform: scale(1.05);
+      }
+      .try-again-button {
+        display: none; /* Hide it by default */
+        background: linear-gradient(45deg, #35dedb, #35aede);
+      }
+      .game-container {
+        border-bottom: 10px solid black;
+        margin-left: 55px;
+        outline: 3px ridge #40362f;
+        margin-top: 140px;
+        width: 80%;
+        max-width: 1000px;
+        padding: 20px;
+        background: url("images/GameZone/wood.jpg") no-repeat center;
+        background-size: cover;
+        border-radius: 1cm;
+        box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.5),
+          0px 0px 20px rgba(0, 0, 0, 0.3);
+        transform: perspective(1000px) rotateX(30deg);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow: hidden;
+        margin-bottom: 40px;
+      }
+      .table {
+        outline: thick ridge #7d7d7d;
+        width: 100%;
+        background: url("images/GameZone/BG_Table.jpeg") no-repeat center;
+        border: 2px solid #dfdfdf;
+        background-size: cover;
+        border-radius: 1cm;
+        padding: 15px;
+        box-shadow: inset 0px 0px 20px rgba(0, 0, 0, 0.5),
+          0px 0px 50px rgba(109, 78, 64, 0.7);
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+      .game-board {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 30px;
+        max-width: 900px;
+        width: 105%;
+      }
+      .card {
+        width: 65px;
+        height: 100px;
+        perspective: 1000px;
+        cursor: pointer;
+        transition: transform 0.5s ease-out;
+      }
+      .card-content {
+        box-shadow: 7px 5px 20px #000000a9;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.5s ease-out;
+      }
+      .card.flipped .card-content {
+        transform: rotateY(180deg);
+      }
+      .card-front,
+      .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        box-shadow: 0px 0px 20px #6b6b6ba4 inset;
+        border-radius: 8px;
+      }
+      .card-front {
+        background-size: cover;
+      }
+      .card-back {
+        transform: rotateY(180deg);
+        background-size: cover;
+      }
+
+      .Z {
+        margin-top: 10pc;
+        color: #1a003d;
+      }
+      @media (max-width: 2180px) {
+        .game-container {
+          max-width: 75%;
+        }
+        .game-board {
+          margin: 3pc;
+          grid-template-columns: repeat(3.5, 1fr);
+        }
+        .card {
+          width: 84px;
+          height: 115px;
+        }
+        .Z, .T {
+            font-size: 170px;
+        }
+      }
+      @media (max-width: 1920px) {
+        .game-container {
+          max-width: 90%;
+        }
+        .game-board {
+          grid-template-columns: repeat(5.5, 1fr);
+        }
+        .Z, .T {
+            font-size: 170px;
+        }
+
+      }
+      @media (max-width: 1440px) {
+        .game-container {
+          max-width: 85%;
+        }
+        .game-board {
+          grid-template-columns: repeat(2.5, 1fr);
+        }
+        .Z, .T {
+            font-size: 140px;
+        }
+
+      }
+      @media (max-width: 1280px) {
+        .game-container {
+          max-width: 80%;
+        }
+        .game-board {
+          margin: 40px;
+          grid-template-columns: repeat(4.5, 1fr);
+        }
+        .card {
+          width: 50px;
+          height: 70px;
+        }
+        .Z, .T {
+            font-size: 110px;
+        }
+
+      }
+      @media (max-width: 1024px) {
+        .game-container {
+          max-width: 75%;
+        }
+        .game-board {
+          margin: 40px;
+          grid-template-columns: repeat(3, 5, 1fr);
+        }
+        .card {
+          width: 50px;
+          height: 70px;
+        }
+        .Z, .T {
+            font-size: 100px;
+        }
+      }
+      @media (max-width: 992px) {
+        .game-container {
+          max-width: 75%;
+        }
+        .game-board {
+          margin: 30px;
+          grid-template-columns: repeat(4.5, 1fr);
+        }
+        .card {
+          width: 50px;
+          height: 70px;
+        }
+      }
+      @media (max-width: 800px) {
+        .game-container {
+          max-width: 85%;
+        }
+        .game-board {
+          grid-template-columns: repeat(3.5, 1fr);
+        }
+        .card {
+          width: 50px;
+          height: 70px;
+        }
+      }
+      @media (max-width: 768px) {
+        .game-container {
+          max-width: 85%;
+        }
+        .game-board {
+          margin: 30px;
+          grid-template-columns: repeat(3.5, 1fr);
+        }
+        .card {
+          width: 40px;
+          height: 55px;
+        }
+        .Z, .T {
+            font-size: 95px;
+        }
+
+      }
+      @media (max-width: 600px) {
+        .game-container {
+          max-width: 80%;
+        }
+        .game-board {
+          margin: 30px;
+          grid-template-columns: repeat(5.5, 1fr);
+        }
+        .card {
+          width: 35px;
+          height: 50px;
+        }
+        .Z, .T {
+            font-size: 70px;
+        }
+
+      }
+      @media (max-width: 480px) {
+        .game-board {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .card {
+          width: 50px;
+          height: 70px;
+        }
+
+        .Z, .T {
+            font-size: 50px;
+        }
+      }
+      @media (max-width: 420px) {
+        .game-container {
+          max-width: 90%;
+        }
+        .game-board {
+          grid-template-columns: repeat(2.5, 1fr);
+        }
+
+        .Z, .T {
+            font-size: 40px;
+        }
+
+      }
+      @media (max-width: 320px) {
+        .game-container {
+          max-width: 100%;
+        }
+        .game-board {
+          grid-template-columns: repeat(3.5, 1fr);
+        }
+        .card {
+          width: 50px;
+          height: 70px;
+        }
+        .Z, .T {
+            font-size: 40px;
+        }
+
+      }
+      /* Winning Animation for All Cards */
+      @keyframes winCardAnimation {
+        0% {
+          transform: scale(1);
+          opacity: 0.8;
+        }
+        25% {
+          transform: scale(1.1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 1;
+        }
+        75% {
+          transform: scale(1.1);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .card.win-animation {
+        animation: winCardAnimation 1.5s ease-out forwards;
+      }
+      /* Smooth Zoom-In for Matched Cards */
+      @keyframes zoomInMatch {
+        0% {
+          transform: scale(1);
+          opacity: 0.8;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+      .card.match-animation {
+        animation: zoomInMatch 0.6s ease-out forwards;
+      }
+
+  </style>
+</head>
+<body>
+  <h1>
+        <div class="game-container">
+      <div class="table">
+        <div class="game-board"></div>
+      </div>
+    </div>
+
+    <div class="leaderboard-container">
+      <div class="leaderboard">
+        <p>Time: <span id="timer">0</span> seconds</p>
+        <p>Best Time: <span id="best-time">--</span> seconds</p>
+        <p>1st: <span id="first-time">--</span></p>
+        <p>2nd: <span id="second-time">--</span></p>
+        <p>3rd: <span id="third-time">--</span></p>
+        <button class="start-button" id="startButton">Start</button>
+        <button class="try-again-button" id="tryAgainButton">Again</button>
+      </div>
+    </div>
+
+  
+  <script>
+      // ------------------------- Memory Game -------------------------
+
+      const gameBoard = document.querySelector(".game-board");
+      let flippedCards = [];
+      let matchedCards = 0;
+      let timeElapsed = 0;
+      let bestTime = Infinity;
+      let timerInterval;
+      const cardImages = [
+        {
+          id: 1,
+          front: "images/GameZone/backcard.png",
+          back: "images/GameZone/blue+.png",
+        },
+        {
+          id: 2,
+          front: "images/GameZone/backcard.png",
+          back: "images/GameZone/blueR.png",
+        },
+        {
+          id: 3,
+          front: "images/GameZone/backcard.png",
+          back: "images/GameZone/ChangeColor.png",
+        },
+        {
+          id: 4,
+          front: "images/GameZone/backcard.png",
+          back: "images/GameZone/Green+.png",
+        },
+        {
+          id: 5,
+          front: "images/GameZone/backcard.png",
+          back: "images/GameZone/GreenR.png",
+        },
+        {
+          id: 6,
+          front: "images/GameZone/backcard.png",
+          back: "images/GameZone/YelR.png",
+        },
+        {
+          id: 7,
+          front: "images/GameZone/backcard.png",
+          back: "images/GameZone/Red+.png",
+        },
+        {
+          id: 8,
+          front: "images/GameZone/backcard.png",
+          back: "images/GameZone/RedR.png",
+        },
+        {
+          id: 9,
+          front: "images/GameZone/backcard.png",
+          back: "images/GameZone/Yel+.png",
+        },
+      ];
+
+let bestTimes = [Infinity, Infinity, Infinity];  
+const winSound = new Audio("MemoryAudio/Slide.mp3");  
+const flipSound = new Audio("MemoryAudio/flip.mp3");  
+const mismatchSound = new Audio("MemoryAudio/errorcard.mp3");  
+const matchSound = new Audio("MemoryAudio/match.mp3");  
+const backgroundMusic = new Audio("MemoryAudio/BgMusic.mp3");  
+backgroundMusic.loop = true; // Loop the background music  
+
+// Play background music when the page loads
+window.onload = () => {
+  backgroundMusic.play().catch(() => {}); // Catch autoplay restrictions
+};
+
+// Ensure background music starts after any user interaction if autoplay was blocked
+document.addEventListener("click", () => {
+  if (backgroundMusic.paused) {
+    backgroundMusic.play().catch(() => {}); // Catch any autoplay restrictions
+  }
+}, { once: true }); // Ensures it runs only once
+
+function startTimer() {  
+  timeElapsed = 0;  
+  document.getElementById("timer").textContent = timeElapsed;  
+  clearInterval(timerInterval);  
+  timerInterval = setInterval(() => {  
+    timeElapsed++;  
+    document.getElementById("timer").textContent = timeElapsed;  
+  }, 1000);  
+}  
+
+function resetMemoryGame() {  
+  gameBoard.innerHTML = "";  
+  flippedCards = [];  
+  matchedCards = 0;  
+  const shuffledCards = [...cardImages, ...cardImages].sort(  
+    () => Math.random() - 0.5  
+  );  
+  shuffledCards.forEach((card) => {  
+    const cardElement = document.createElement("div");  
+    cardElement.classList.add("card");  
+    cardElement.dataset.id = card.id;  
+    cardElement.innerHTML = `<div class="card-content">  
+              <div class="card-front" style="background-image: url('${card.front}')"></div>  
+              <div class="card-back" style="background-image: url('${card.back}')"></div>  
+          </div>`;  
+    cardElement.addEventListener("click", flipCard);  
+    gameBoard.appendChild(cardElement);  
+  });  
+  document.getElementById("tryAgainButton").style.display = "none";  
+  document.getElementById("startButton").style.display = "inline-block";  
+}  
+
+function flipCard() {  
+  if (flippedCards.length === 2 || this.classList.contains("flipped")) return;  
+  flipSound.play();  
+  this.classList.add("flipped");  
+  this.classList.add("flip-animation");  
+  flippedCards.push(this);  
+  if (flippedCards.length === 2) setTimeout(checkMatch, 500);  
+}  
+
+function checkMatch() {  
+  const [card1, card2] = flippedCards;  
+  if (card1.dataset.id === card2.dataset.id) {  
+    matchedCards += 2;  
+    matchSound.play(); // Play match sound when a pair is found  
+    card1.classList.add("win-animation");  
+    card2.classList.add("win-animation");  
+    card1.classList.add("match-animation");  
+    card2.classList.add("match-animation");  
+
+    if (matchedCards === cardImages.length * 2) {  
+      winSound.play().catch(() => {}); // Ensure win sound plays
+      document.getElementById("tryAgainButton").style.display = "inline-block";  
+      document.getElementById("startButton").style.display = "none";  
+      clearInterval(timerInterval);  
+      updateBestTimes(timeElapsed);  
+      backgroundMusic.pause(); // Stop background music on game completion  
+      setTimeout(() => {  
+        document.querySelectorAll(".card").forEach((card) => {  
+          card.classList.add("win-animation");  
+        });  
+      }, 500);  
+    }  
+  } else {  
+    mismatchSound.play();  
+    flippedCards.forEach((card) => card.classList.remove("flipped"));  
+  }  
+  flippedCards = [];  
+}  
+
+function updateBestTimes(time) {  
+  if (time < bestTimes[0]) {  
+    bestTimes[2] = bestTimes[1];  
+    bestTimes[1] = bestTimes[0];  
+    bestTimes[0] = time;  
+  } else if (time < bestTimes[1]) {  
+    bestTimes[2] = bestTimes[1];  
+    bestTimes[1] = time;  
+  } else if (time < bestTimes[2]) {  
+    bestTimes[2] = time;  
+  }  
+  document.getElementById("first-time").textContent =  
+    bestTimes[0] === Infinity ? "--" : bestTimes[0];  
+  document.getElementById("second-time").textContent =  
+    bestTimes[1] === Infinity ? "--" : bestTimes[1];  
+  document.getElementById("third-time").textContent =  
+    bestTimes[2] === Infinity ? "--" : bestTimes[2];  
+  document.getElementById("best-time").textContent =  
+    bestTimes[0] === Infinity ? "--" : bestTimes[0];  
+}  
+
+document.getElementById("startButton").addEventListener("click", () => {  
+  startTimer();  
+  resetMemoryGame();  
+  backgroundMusic.play().catch(() => {}); // Play background music  
+});  
+
+document.getElementById("tryAgainButton").addEventListener("click", () => {  
+  resetMemoryGame();  
+  backgroundMusic.play().catch(() => {}); // Restart background music  
+});
+    
+
+  </script>
+</body>
+</html>

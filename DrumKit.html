@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+ 
+    <title>Drum Kit</title>
+    <style>
+    
+       @font-face {
+            font-family: "Dr";
+            src: url("webfonts/Magnetar.otf");
+        }
+    
+      body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('images/darkwood.jpg') no-repeat center center fixed;
+    background-size: cover;
+    background-color: #000;
+}
+        .power-button {
+     margin-top: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #2d2c2c;
+    border: none;
+    outline: none;
+        box-shadow: 0px 0px 15px 5px, -3px -3px 5px #ffffff;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.power-button::before {
+    content: "ტ"; /* Unicode Power Icon */
+    font-size: 29px;
+    color: #aaa;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: Arial, sans-serif;
+}
+
+.power-button:active {
+    box-shadow: inset 0px 0px 30px 10px, inset -5px -5px 10px #ffffff;
+}
+
+        .container {
+            font-family: "Dr";
+            height: 460px;
+            border-bottom: 5px solid black;
+            border-right: 10px solid black;
+            width: 35%;
+            box-shadow: 50px -50px 700px  inset, -15px 15px 50px 10px black;
+            border-radius: 10px;
+            margin-top: 50px;
+            margin-left: 390px;
+            background-color: #2d2c2c;
+            padding: 20px;
+            text-align: center;
+            
+        }
+
+        h2 {
+            margin-right: 40px;
+            text-align: right;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .drum-kit {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .key,
+        .key1,
+        .key2,
+        .key3,
+        .key4,
+        .key5,
+        .key6,
+        .key7,
+        .key8,
+        .key9,
+        .key10,
+        .key11,
+        .key12,
+        .key13,
+        .key14,
+        .key15 {
+            box-shadow: 0px 0px 30px 20px inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+            width: 80px;
+            height: 70px;
+            background: #ccc;
+            color: black;
+            font-size: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .key {
+            box-shadow: 0px 0px 30px 20px #ff8480 inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        /* Additional Key Styles */
+        .key1 {
+            box-shadow: 0px 0px 30px 20px #ffd480 inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key2 {
+            box-shadow: 0px 0px 30px 20px #ffff80 inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key3 {
+            box-shadow: 0px 0px 30px 20px #ff80aa inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key4 {
+            box-shadow: 0px 0px 30px 20px #e085c2 inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key5 {
+            box-shadow: 0px 0px 30px 20px #99ffbb inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key6 {
+            box-shadow: 0px 0px 30px 20px #aaff80 inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key7 {
+            box-shadow: 0px 0px 30px 20px #ffffb3 inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key8 {
+            box-shadow: 0px 0px 30px 20px #99ddff inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key9 {
+            box-shadow: 0px 0px 30px 20px #99ffff inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key10 {
+            box-shadow: 0px 0px 30px 20px #4da6ff inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key11 {
+            box-shadow: 0px 0px 30px 10px #b366ff inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key12 {
+            box-shadow: 0px 0px 30px 20px #ff80ff inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key13 {
+            box-shadow: 0px 0px 30px 15px #33ff99 inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key14 {
+            box-shadow: 0px 0px 30px 20px #ff9999 inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+
+        .key15 {
+            box-shadow: 0px 0px 30px 20px #9999ff inset, -5px 5px 10px rgba(0, 0, 0, 0.900);
+        }
+    .key:active,
+        .key.playing,
+        .key1.playing,
+        .key1:active,
+        .key2.playing,
+        .key2:active,
+        .key3.playing,
+        .key3:active,
+        .key4.playing,
+        .key4:active,
+        .key5.playing,
+        .key5:active,
+        .key6.playing,
+        .key6:active,
+        .key7.playing,
+        .key7:active,
+        .key8.playing,
+        .key8:active,
+        .key9.playing,
+        .key9:active,
+        .key10.playing,
+        .key10:active,
+        .key11.playing,
+        .key11:active,
+        .key12.playing,
+        .key12:active,
+        .key13.playing,
+        .key13:active,
+        .key14.playing,
+        .key14:active,
+        .key15.playing,
+        .key15:active {
+            transform: scale(1.1);
+            background: #ccc;
+            color: #222;
+        }
+
+        /* Mobile-Friendly Styles */
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 250px;
+                margin-left: 70px;
+                width: 70%;
+                padding: 15px;
+            }
+/* Style for DrumKit heading */
+h2 {
+    display: inline-flex;
+    align-items: center;
+    color: white;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* 3D Indicator (Dot) */
+.indicator {
+    width: 12px; /* Adjusted for better visibility */
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 5px; /* Spacing between letters */
+    background: radial-gradient(circle at 30% 30%, #ff4d4d, #990000); /* Red gradient */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5), /* Outer shadow */
+                inset -2px -2px 4px rgba(255, 255, 255, 0.3), /* Top left light */
+                inset 2px 2px 4px rgba(0, 0, 0, 0.5); /* Inner bottom shadow */
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+/* Green when On */
+.indicator.on {
+    background: radial-gradient(circle at 30% 30%, #00ff00, #006600); /* Green gradient */
+    box-shadow: 0px 4px 6px rgba(0, 255, 0, 0.5), /* Outer green glow */
+                inset -2px -2px 4px rgba(255, 255, 255, 0.3), /* Top left light */
+                inset 2px 2px 4px rgba(0, 100, 0, 0.5); /* Inner bottom shadow */
+}
+
+            .key,
+            .key1,
+            .key2,
+            .key3,
+            .key4,
+            .key5,
+            .key6,
+            .key7,
+            .key8,
+            .key9,
+            .key10,
+            .key11,
+            .key12,
+            .key13,
+            .key14,
+            .key15 {
+                width: 70px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .key,
+            .key1,
+            .key2,
+            .key3,
+            .key4,
+            .key5,
+            .key6,
+            .key7,
+            .key8,
+            .key9,
+            .key10,
+            .key11,
+            .key12,
+            .key13,
+            .key14,
+            .key15 {
+                width: 50px;
+                height: 45px;
+            }
+            
+
+            .drum-kit {
+                gap: 5px;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    
+    
+    </style>
+</head>
+
+<body>
+    
+    <div class="container">
+        <h2>DrumKit</h2>
+           <div class="indicator" id="indicator1"></div>
+            <div class="indicator" id="indicator2"></div>
+        <div class="drum-kit">
+            <div class="key" data-key="81">
+                <span>Q</span>
+                <small>Base Kick</small>
+            </div>
+            <div class="key1" data-key="87">
+                <span>W</span>
+                <small>Snare</small>
+            </div>
+            <div class="key2" data-key="69">
+                <span>E</span>
+                <small>Tom</small>
+            </div>
+            <div class="key3" data-key="82">
+                <span>R</span>
+                <small>Kick</small>
+            </div>
+        </div>
+
+        <div class="drum-kit">
+            <div class="key4" data-key="65">
+                <span>A</span>
+                <small>Kick Snare</small>
+            </div>
+            <div class="key5" data-key="83">
+                <span>S</span>
+                <small>Kick Snare</small>
+            </div>
+            <div class="key6" data-key="68">
+                <span>D</span>
+                <small>Slap Snare</small>
+            </div>
+            <div class="key7" data-key="70">
+                <span>F</span>
+                <small>Snare</small>
+            </div>
+        </div>
+
+        <div class="drum-kit">
+            <div class="key8" data-key="85">
+                <span>U</span>
+                <small>Shake bell</small>
+            </div>
+            <div class="key9" data-key="73">
+                <span>I</span>
+                <small>Triple Hi-hat</small>
+            </div>
+            <div class="key10" data-key="79">
+                <span>O</span>
+                <small>Hi-hat</small>
+            </div>
+            <div class="key11" data-key="80">
+                <span>P</span>
+                <small>Rimshot</small>
+            </div>
+        </div>
+
+        <div class="drum-kit">
+            <div class="key12" data-key="76">
+                <span>L</span>
+                <small>PianoMelody</small>
+            </div>
+            <div class="key13" data-key="72">
+                <span>H</span>
+                <small>GuitarMelody</small>
+            </div>
+            <div class="key14" data-key="74">
+                <span>J</span>
+                <small>VoiceOver</small>
+            </div>
+            <div class="key15" data-key="75">
+                <span>K</span>
+                <small>Phonk Music</small>
+            </div>
+        </div>
+  <div class="drum-kit">
+         <button id="startButton" class="power-button"></button>
+        </div>
+
+    </div>
+        <audio data-key="81" src="MemoryAudio/kick.wav"></audio>
+        <audio data-key="87" src="MemoryAudio/kick-drum.wav"></audio>
+        <audio data-key="69" src="MemoryAudio/boomy-tom.wav"></audio>
+        <audio data-key="82" src="MemoryAudio/dry-house-kick.wav"></audio>
+        <audio data-key="65" src="MemoryAudio/snare.wav"></audio>
+        <audio data-key="83" src="MemoryAudio/memphis-snare.wav"></audio>
+        <audio data-key="68" src="MemoryAudio/layered-snare.wav"></audio>
+        <audio data-key="70" src="MemoryAudio/falling-drum-snare.wav"></audio>
+        <audio data-key="85" src="MemoryAudio/percs-bundle.wav"></audio>
+        <audio data-key="73" src="MemoryAudio/hi-hat-roll.wav"></audio>
+        <audio data-key="79" src="MemoryAudio/hi-hat closed.wav"></audio>
+        <audio data-key="80" src="MemoryAudio/hihat2.wav"></audio>
+        <audio data-key="76" src="MemoryAudio/piano.wav"></audio>
+        <audio data-key="72" src="MemoryAudio/guitar.wav"></audio>
+        <audio data-key="74" src="MemoryAudio/shake-that-thang.wav"></audio>
+        <audio data-key="75" src="MemoryAudio/flowing-shake.wav"></audio>
+    </div>
+     
+ <script>
+    let isStarted = false; // Flag to check if the drum kit is active
+
+    function playSound(e) {
+        if (!isStarted) return; // Prevent sound if Start is not clicked
+
+        const keyCode = e.type === "keydown" ? e.keyCode : e.target.dataset.key;
+        const audio = document.querySelector(`audio[data-key="${keyCode}"]`);
+        const key = document.querySelector(`.key[data-key="${keyCode}"], .key1[data-key="${keyCode}"], .key2[data-key="${keyCode}"], .key3[data-key="${keyCode}"], .key4[data-key="${keyCode}"], .key5[data-key="${keyCode}"], .key6[data-key="${keyCode}"], .key7[data-key="${keyCode}"], .key8[data-key="${keyCode}"], .key9[data-key="${keyCode}"], .key10[data-key="${keyCode}"], .key11[data-key="${keyCode}"], .key12[data-key="${keyCode}"], .key13[data-key="${keyCode}"], .key14[data-key="${keyCode}"], .key15[data-key="${keyCode}"]`);
+
+        if (!audio) return;
+
+        audio.currentTime = 0;
+        audio.play();
+
+        if (key) {
+            key.classList.add("playing");
+        }
+    }
+
+    function removeTransition(e) {
+        if (e.propertyName !== "transform") return;
+        e.target.classList.remove("playing");
+    }
+
+    // Start button functionality
+    document.getElementById("startButton").addEventListener("click", function () {
+        isStarted = !isStarted; // Toggle the drum kit state
+
+        // Update indicators based on the state
+        document.getElementById("indicator1").classList.toggle("on", isStarted);
+        document.getElementById("indicator2").classList.toggle("on", isStarted);
+
+        // Add animation to all keys when starting
+        if (isStarted) {
+            document.querySelectorAll(".key, .key1, .key2, .key3, .key4, .key5, .key6, .key7, .key8, .key9, .key10, .key11, .key12, .key13, .key14, .key15").forEach((key, index) => {
+                setTimeout(() => {
+                    key.classList.add("playing");
+                    setTimeout(() => key.classList.remove("playing"), 300);
+                }, index * 100); // Staggered effect
+            });
+        }
+    });
+
+    // Keyboard and mouse click event listeners
+    document.addEventListener("keydown", playSound);
+    document.querySelectorAll(".key, .key1, .key2, .key3, .key4, .key5, .key6, .key7, .key8, .key9, .key10, .key11, .key12, .key13, .key14, .key15").forEach(key => {
+        key.addEventListener("click", playSound);
+        key.addEventListener("transitionend", removeTransition);
+    });
+</script>
+</head>
+</html>

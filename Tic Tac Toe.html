@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>3D Tic-Tac-Toe Slot Machine</title>
+    <style>
+    @font-face {
+            font-family: "Tic";
+            src: url("webfonts/Moogalator.ttf");
+        }
+        
+        @font-face {
+            font-family: "Tic1";
+            src: url("webfonts/NIXED.ttf");
+        }
+        @font-face {
+            font-family: "Tic2";
+            src: url("webfonts/Moogalator1.ttf");
+        }
+        body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: "Tic1";
+    background: url('images/casino.jpg') center center;
+    background-size: cover;
+}
+
+     .slot-machine {
+    outline: 25px ridge silver;
+    background: linear-gradient(to bottom, #d40000, #7a0000);
+    padding: 20px;
+    text-align: center;
+    width: 400px;
+    position: relative;
+    border-bottom: 6px solid black;
+    border-top-right-radius: 1.5cm;
+    border-top-left-radius: 1.5cm;
+    box-shadow: 0 50px 60px 20px rgba(0, 0, 0, 0.900), 0 6px 10px rgba(255, 255, 255, 0.2), inset 0 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+        .jackpot {
+                font-family: "Tic";
+            background: linear-gradient(to bottom, #ff0000, #aa0000);
+            color: yellow;
+            font-size: 28px;
+            font-weight: bold;
+            padding: 14px;
+            margin-bottom: 4px;
+            margin-top: 20px;
+            outline: 5px ridge silver;
+            border-radius: 10px;
+            text-shadow: 3px 3px 10px black;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+        }
+
+        .screen {
+            outline: 5px ridge silver;
+            background: #222;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .board {
+                border-bottom: 10px solid black;
+                border-left: 10px solid black;
+                border-right: 10px solid grey;
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 6px;
+            background: linear-gradient(to bottom, #0044ff, #002266);
+            padding: 20px;
+            outline: 5px ridge silver;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 310px;
+            margin: auto;
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .cell {
+                
+                font-family: "Tic2";
+            width: 95px;
+    height: 85px;
+    background: linear-gradient(145deg, #e0e0e0, #b0b0b0); /* Subtle gradient for realistic lighting */
+    border: 2px solid #999; /* Light border */
+    color: #333; /* Text color for contrast */
+    font-size: 38px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 75px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out; /* Smooth transition for hover and click effects */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), inset 0 4px 8px rgba(255, 255, 255, 0.3);
+        }
+
+        .cell:hover {
+            background: lightgray;
+        }
+
+        .cell:active {
+            transform: scale(0.9);
+        }
+
+        .timer-container {
+             background: #111;
+    
+    margin-top: 10px;
+    border: 6px solid #2c3e50;
+    border-radius: 10px;
+    display: inline-block;
+    padding: 10px 20px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.2); /* Depth shadow for realism */
+    transition: all 0.3s ease; /* Smooth transition for hover and active states */
+        }
+
+        .timer {
+color: #ecf0f1; /* Light color for text */
+    font-size: 1.2rem;
+            height: 30px;
+            width: 100px;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Shadow for text to make it pop */
+    
+    border-radius: 8px;
+    background: linear-gradient(145deg, #34495e, #2c3e50); /* Dark blue to gray gradient */
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3); /* Inner shadow for depth */
+    transition: all 0.3s ease-in-out;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            background: black;
+            padding: 14px;
+            outline: 5px ridge silver;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+.button {
+          font-family: "Tic1";
+    width: 100px;
+    height: 50px;
+    border-radius: 12px;  /* Rounded corners for a polished look */
+    border: none;
+    margin: 0 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    outline: 5px ridge silver;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.4); /* Outer and inner shadow for depth */
+    transition: all 0.3s ease-in-out; /* Smooth transition for all properties */
+    position: relative;
+    background: linear-gradient(145deg, #3498db, #2980b9); /* Default blue gradient */
+}
+
+.button:active {
+    transform: scale(0.95); /* Slight shrink effect when pressed */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.6); /* Darker shadow when pressed */
+    top: 2px; /* Move the button down to simulate pressing */
+}
+
+.button:focus {
+    outline: none; /* Remove focus outline */
+}
+
+.button:hover {
+    background: linear-gradient(145deg, #2980b9, #3498db); /* Lighter blue gradient on hover */
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
+}
+
+.orange {
+    background: linear-gradient(145deg, #ff9800, #e68900); /* Orange gradient */
+}
+
+.green {
+    background: linear-gradient(145deg, #4caf50, #388e3c); /* Green gradient */
+}
+
+.purple {
+    background: linear-gradient(145deg, #9c27b0, #7b1fa2); /* Purple gradient */
+}
+
+.yellow {
+    background: linear-gradient(145deg, #fbc02d, #f57f17); /* Yellow gradient */
+}
+        .selection {
+            background: linear-gradient(145deg, #f39c12, #e67e22);
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 5px;
+                  font-family: "Tic1";
+            margin-top: 30px;
+            width: 60%;
+            outline: 5px ridge silver;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 6px rgba(255, 255, 255, 0.3);
+        }
+
+       @keyframes winAnimation {
+        0% { background: green; color: white; }
+        50% { background: limegreen; color: black; }
+        100% { background: green; color: white; }
+    }
+
+    @keyframes drawAnimation {
+        0% { background: orange; color: white; }
+        50% { background: gold; color: black; }
+        100% { background: orange; color: white; }
+    }
+
+    .win {
+        animation: winAnimation 0.5s ease-in-out alternate infinite;
+    }
+
+    .draw {
+        animation: drawAnimation 0.5s ease-in-out alternate infinite;
+    }
+        
+        @media screen and (max-width: 768px) {
+    .slot-machine {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .jackpot {
+        font-size: 22px;
+        padding: 10px;
+    }
+
+    .board {
+        width: 100%;
+        max-width: 270px;
+        padding: 15px;
+    }
+
+    .cell {
+        width: 80px;
+        height: 75px;
+        font-size: 30px;
+        line-height: 70px;
+    }
+
+    .buttons {
+        flex-wrap: wrap;
+        padding: 10px;
+    }
+
+    .button {
+        width: 80px;
+        height: 45px;
+        font-size: 10px;
+        margin: 5px;
+    }
+
+    .selection {
+        font-size: 18px;
+        padding: 8px;
+        width: 80%;
+    }
+
+    .timer {
+        font-size: 0.7rem;
+        width: 80px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .jackpot {
+        font-size: 18px;
+        padding: 8px;
+    }
+
+    .board {
+        max-width: 240px;
+        padding: 10px;
+    }
+
+    .cell {
+        width: 70px;
+        height: 65px;
+        font-size: 24px;
+        line-height: 60px;
+    }
+
+    .button {
+        width: 70px;
+        height: 40px;
+        font-size: 9px;
+    }
+
+    .selection {
+        font-size: 16px;
+        width: 90%;
+    }
+
+    .timer {
+        font-size: 0.4rem;
+        width: 70px;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <div class="slot-machine">
+        <div class="jackpot">TIC TAC TOE</div>
+        
+        <div class="screen">
+            <div class="board" id="board"></div>
+            <div class="timer-container">
+                <div class="timer" id="timer">TIMER: 30s</div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button class="button orange" onclick="selectMode('pvp')">PvP</button>
+<button class="button green" onclick="selectMode('bot')">Bot PvP</button>
+<button class="button purple" onclick="toggleTimer()">Timer On/Off</button>
+<button class="button yellow" onclick="startResetGame()">Start /Reset</button>
+        </div>
+
+        <button class="selection">SELECT A MODE</button>
+    </div>
+
+<script>
+    let board, currentPlayer, gameActive = false, timeLeft = 5, timer, timerEnabled = false, mode = "";
+
+    // Sound effects for click, win, lose, draw, O win, and button click
+    let clickSound = new Audio('MemoryAudio/Slide1.mp3'); // Ensure the correct path to the file
+    let winSound = new Audio('MemoryAudio/win.mp3'); // Ensure the correct path to the file
+    let loseSound = new Audio('MemoryAudio/lose.mp3'); // Ensure the correct path to the file
+    let drawSound = new Audio('MemoryAudio/draw.mp3'); // Ensure the correct path to the draw sound file
+    let oWinSound = new Audio('MemoryAudio/lose.mp3'); // Ensure the correct path to the O win sound file
+    let buttonClickSound = new Audio('MemoryAudio/Click.mp3'); // Ensure the correct path to the button click sound file
+
+    // Function to play button click sound
+    function playButtonClickSound() {
+        buttonClickSound.play();
+    }
+
+    function selectMode(selectedMode) {
+        playButtonClickSound(); // Play button click sound
+        mode = selectedMode;
+        document.querySelector(".selection").innerText = mode === "pvp" ? "Mode: PvP" : "Mode: Play vs Bot";
+        gameActive = false;
+    }
+
+    function toggleTimer() {
+        playButtonClickSound(); // Play button click sound
+        timerEnabled = !timerEnabled;
+        document.querySelector(".selection").innerText = `Timer: ${timerEnabled ? "ON" : "OFF"}`;
+    }
+
+    function startResetGame() {
+        playButtonClickSound(); // Play button click sound
+        
+        // Stop sounds when restarting
+        clickSound.pause();
+        winSound.pause();
+        loseSound.pause();
+        drawSound.pause(); // Stop draw sound if game is reset
+        oWinSound.pause(); // Stop O win sound if game is reset
+        buttonClickSound.pause(); // Stop button click sound if game is reset
+
+        // Reset the sounds to the beginning
+        clickSound.currentTime = 0;
+        winSound.currentTime = 0;
+        loseSound.currentTime = 0;
+        drawSound.currentTime = 0; // Reset draw sound to the beginning
+        oWinSound.currentTime = 0; // Reset O win sound to the beginning
+        buttonClickSound.currentTime = 0; // Reset button click sound to the beginning
+
+        if (mode === "") {
+            document.querySelector(".selection").innerText = "⚠️ Please select a mode first!";
+            return;
+        }
+
+        board = Array(9).fill("");
+        currentPlayer = "X";
+        gameActive = true;
+        timeLeft = 5; // Set timer to 5 seconds for each turn
+        clearInterval(timer);
+        document.getElementById("timer").innerText = `TIMER: ${timeLeft}s`;
+        createBoard();
+
+        if (timerEnabled) startTimer();
+
+        document.querySelector(".selection").innerText = mode === "pvp" ? "Mode: Player vs Player" : "Mode: Play vs Bot";
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(() => {
+            if (timeLeft > 0) {
+                timeLeft--;
+                document.getElementById("timer").innerText = `TIMER: ${timeLeft}s`;
+            } else {
+                clearInterval(timer);
+                gameActive = false;
+                document.querySelector(".selection").innerText = "⏳ Time's up! Game over.";
+                loseSound.play(); // Play lose sound
+                setTimeout(startResetGame, 2000); // Reset game after a short delay
+            }
+        }, 1000);
+    }
+
+    function createBoard() {
+        const boardElement = document.getElementById("board");
+        boardElement.innerHTML = "";
+        board.forEach((_, index) => {
+            let cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.dataset.index = index;
+            cell.onclick = () => makeMove(index);
+            boardElement.appendChild(cell);
+        });
+    }
+
+    function makeMove(index) {
+        if (!gameActive || board[index] || mode === "") {
+            document.querySelector(".selection").innerText = "⚠️ Select a mode & start the game!";
+            return;
+        }
+
+        board[index] = currentPlayer;
+        document.querySelectorAll(".cell")[index].innerText = currentPlayer;
+        clickSound.play(); // Play click sound
+
+        if (checkWinner()) return;
+
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+
+        // Reset the timer for the next player's turn
+        timeLeft = 5; // Reset timer to 5 seconds
+        document.getElementById("timer").innerText = `TIMER: ${timeLeft}s`;
+        if (timerEnabled) startTimer(); // Restart timer for the next turn
+
+        if (mode === "bot" && currentPlayer === "O") {
+            setTimeout(botMove, 500);
+        }
+    }
+
+    function botMove() {
+        if (!gameActive) return;
+
+        let emptyCells = board.map((val, idx) => (val === "" ? idx : null)).filter(val => val !== null);
+        if (emptyCells.length === 0) return;
+
+        let randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        board[randomIndex] = "O";
+        document.querySelectorAll(".cell")[randomIndex].innerText = "O";
+
+        clickSound.play(); // Play click sound
+
+        if (checkWinner()) return;
+
+        currentPlayer = "X";
+    }
+
+    function checkWinner() {
+        const winningCombinations = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], 
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], 
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        for (let combo of winningCombinations) {
+            let [a, b, c] = combo;
+            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                gameActive = false;
+                clearInterval(timer);
+
+                if (board[a] === "X") {
+                    document.querySelector(".selection").innerText = `🏆 ${board[a]} Wins!`;
+                    winSound.play(); // Play win sound for X
+                } else if (board[a] === "O") {
+                    document.querySelector(".selection").innerText = `🏆 ${board[a]} Wins!`;
+                    oWinSound.play(); // Play O win sound
+                }
+
+                // Add animation to winning cells
+                document.querySelectorAll(".cell")[a].classList.add("win");
+                document.querySelectorAll(".cell")[b].classList.add("win");
+                document.querySelectorAll(".cell")[c].classList.add("win");
+
+                setTimeout(startResetGame, 2000); // Reset game after a short delay
+                return true;
+            }
+        }
+
+        if (!board.includes("")) {
+            gameActive = false;
+            clearInterval(timer);
+            document.querySelector(".selection").innerText = "😐 It's a Draw!";
+            
+            // Play draw sound
+            drawSound.play();
+
+            // Add draw animation to all cells
+            document.querySelectorAll(".cell").forEach(cell => cell.classList.add("draw"));
+
+            setTimeout(startResetGame, 2000); // Reset game after a short delay
+            return true;
+        }
+
+        return false;
+    }
+</script>
+
+</body>
+</html>
